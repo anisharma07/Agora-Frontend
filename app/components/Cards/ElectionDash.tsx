@@ -6,7 +6,10 @@ import ElectionInfoCard from "./ElectionInfoCard";
 import { useOpenElection } from "../Hooks/GetOpenElections";
 
 const ElectionDash = () => {
-  const { elections, isLoading } = useOpenElection();
+  const { elections, isLoading } = useOpenElection() as {
+    elections: `0x${string}`[];
+    isLoading: boolean;
+  };
   const [electionStatuses, setElectionStatuses] = useState<{
     [key: string]: number;
   }>({});
@@ -91,10 +94,12 @@ const ElectionDash = () => {
                       />
                     </svg>
                   </div>
-                  <h2 className="text-2xl font-semibold text-gray-900">No Elections Found</h2>
+                  <h2 className="text-2xl font-semibold text-gray-900">
+                    No Elections Found
+                  </h2>
                   <p className="text-center text-gray-500">
-                    It seems there are no elections available at the moment. Please check back
-                    later.
+                    It seems there are no elections available at the moment.
+                    Please check back later.
                   </p>
                   <button
                     className="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg shadow hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
@@ -102,9 +107,7 @@ const ElectionDash = () => {
                   >
                     Refresh
                   </button>
-</div>
-
-
+                </div>
               )}
             </div>
           </div>

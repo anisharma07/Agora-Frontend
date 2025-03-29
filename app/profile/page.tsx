@@ -18,7 +18,10 @@ const ElectionMiniSkeleton: React.FC = () => {
 };
 
 const ProfilePage: React.FC = () => {
-  const { elections = [], isLoading } = useOpenElection();
+  const { elections, isLoading } = useOpenElection() as {
+    elections: `0x${string}`[];
+    isLoading: boolean;
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
