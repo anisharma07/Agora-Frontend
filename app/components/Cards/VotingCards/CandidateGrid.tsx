@@ -17,6 +17,7 @@ import { sepolia } from "viem/chains";
 import { unpinJSONFile } from "@/app/helpers/pinToIPFS";
 import CandidateDescription from "../../Fragment/CandidateDescription";
 import Vote from "../../Modal/Vote";
+import Image from "next/image";
 
 const CandidateGrid = ({
   isVoted,
@@ -118,7 +119,9 @@ const CandidateGrid = ({
       )}
 
       <div className="flex mt-2 flex-col items-center pb-2">
-        <img
+        <Image
+          width={64}
+          height={64}
           className="w-16 h-16 mb-3 rounded-full shadow-lg"
           src={AVATARS[candidateId % 4]}
           alt="pfp"

@@ -10,7 +10,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { ErrorMessage } from "../helpers/ErrorMessage";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { sepolia } from "viem/chains";
-import { ArrowPathIcon , PlusIcon, TrashIcon} from "@heroicons/react/24/solid";
+import { ArrowPathIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
 import ElectionInfoPopup from "../components/Modal/ElectionInfoPopup";
 
@@ -22,10 +22,10 @@ const CreatePage: React.FC = () => {
   const { writeContractAsync } = useWriteContract();
   const [startTime, setStartTime] = useState<Date | null>(new Date());
   const [endTime, setEndTime] = useState<Date | null>(new Date());
-  const [candidates,setCandidates] = useState<Candidate[]>([])
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
   const changeChain = () => {
     switchChain({ chainId: sepolia.id });
-  }
+  };
   interface Candidate {
     name: string;
     description: string;
@@ -33,13 +33,17 @@ const CreatePage: React.FC = () => {
   const addCandidate = () => {
     setCandidates([...candidates, { name: "", description: "" }]);
   };
-  
+
   const removeCandidate = (index: number) => {
     const newCandidates = candidates.filter((_, i) => i !== index);
     setCandidates(newCandidates);
   };
-  
-  const updateCandidate = (index: number, field: keyof Candidate, value: string) => {
+
+  const updateCandidate = (
+    index: number,
+    field: keyof Candidate,
+    value: string
+  ) => {
     const newCandidates = candidates.map((candidate, i) => {
       if (i === index) {
         return { ...candidate, [field]: value };
@@ -55,10 +59,9 @@ const CreatePage: React.FC = () => {
     const description = formData.get("description") as string;
     const ballotType = BigInt(selectedBallot);
 
-    if (candidates.length<2){
+    if (candidates.length < 2) {
       toast.error("At least 2 candidates are required!");
       return;
-    
     }
 
     if (!startTime || !endTime) {
@@ -73,11 +76,16 @@ const CreatePage: React.FC = () => {
       toast.error("Invalid timing. End time must be after start time.");
       return;
     }
-    if(candidates.length>0  && candidates.some(candidate=>!candidate.name || !candidate.description)){
-      toast.error("please enter all candidate information or remove empty candidates.")
-      return 
+    if (
+      candidates.length > 0 &&
+      candidates.some((candidate) => !candidate.name || !candidate.description)
+    ) {
+      toast.error(
+        "please enter all candidate information or remove empty candidates."
+      );
+      return;
     }
-  // passed candidates to the create election function 
+    // passed candidates to the create election function
     try {
       await writeContractAsync({
         address: ELECTION_FACTORY_ADDRESS,
@@ -85,7 +93,11 @@ const CreatePage: React.FC = () => {
         functionName: "createElection",
         args: [
           { startTime: start, endTime: end, name, description }, // ElectionInfo object
-          candidates.map((c, index) => ({ candidateID: BigInt(index), name: c.name, description: c.description })), 
+          candidates.map((c, index) => ({
+            candidateID: BigInt(index),
+            name: c.name,
+            description: c.description,
+          })),
           ballotType,
           ballotType,
         ],
@@ -104,17 +116,17 @@ const CreatePage: React.FC = () => {
 
   return (
     <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 0.5 }}
-    className="h-screen w-full bg-gradient-to-br pt-[50px] from-gray-100 to-gray-200 flex flex-col items-center justify-start p-4 overflow-y-auto"
-  >
-    <motion.div
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.2, duration: 0.5 }}
-      className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-8 space-y-8 my-12"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="h-screen w-full bg-gradient-to-br pt-[50px] from-gray-100 to-gray-200 flex flex-col items-center justify-start p-4 overflow-y-auto"
     >
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+        className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-8 space-y-8 my-12"
+      >
         <h2 className="text-3xl font-extrabold text-gray-800 mb-6 text-center">
           Create New Election
         </h2>
@@ -129,7 +141,7 @@ const CreatePage: React.FC = () => {
             label="Description"
             placeholder="Describe the election"
           />
-          {/* candidate section  shows placeholder if empty candidate and allows to add cnadidates*/ }
+          {/* candidate section  shows placeholder if empty candidate and allows to add cnadidates*/}
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-medium text-gray-900">Candidates</h3>
@@ -144,10 +156,11 @@ const CreatePage: React.FC = () => {
                 Add Candidate
               </motion.button>
             </div>
-            
+
             {candidates.length === 0 ? (
               <p className="text-gray-500 text-sm italic text-center py-4">
-                No candidates added yet. Click "Add Candidate" to begin adding candidates.
+                No candidates added yet. Click {'"Add Candidate"'} to begin
+                adding candidates.
               </p>
             ) : (
               candidates.map((candidate, index) => (
@@ -174,14 +187,18 @@ const CreatePage: React.FC = () => {
                   <input
                     type="text"
                     value={candidate.name}
-                    onChange={(e) => updateCandidate(index, "name", e.target.value)}
+                    onChange={(e) =>
+                      updateCandidate(index, "name", e.target.value)
+                    }
                     placeholder="Candidate Name"
                     className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     required
                   />
                   <textarea
                     value={candidate.description}
-                    onChange={(e) => updateCandidate(index, "description", e.target.value)}
+                    onChange={(e) =>
+                      updateCandidate(index, "description", e.target.value)
+                    }
                     placeholder="Candidate Description"
                     rows={2}
                     className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"

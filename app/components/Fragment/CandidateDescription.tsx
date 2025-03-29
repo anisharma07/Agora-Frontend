@@ -6,13 +6,14 @@ const CandidateDescription = ({ IpfsHash }: { IpfsHash: String }) => {
     name: "",
     description: "",
   });
-  const getIpfsFile = async () => {
-    const res = await fetchFileFromIPFS(IpfsHash);
-    setipfsFile(res);
-  };
+
   useEffect(() => {
-    ipfsFile.name === "" && getIpfsFile();
-  }, []);
+    const getIpfsFile = async () => {
+      const res = await fetchFileFromIPFS(IpfsHash);
+      setipfsFile(res);
+    };
+    getIpfsFile();
+  }, [IpfsHash]);
   return <p>{ipfsFile?.description}</p>;
 };
 

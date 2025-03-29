@@ -18,6 +18,7 @@ import { sepolia } from "viem/chains";
 import { fetchFileFromIPFS } from "@/app/helpers/fetchFileFromIPFS";
 import { unpinJSONFile } from "@/app/helpers/pinToIPFS";
 import CandidateDescription from "../../Fragment/CandidateDescription";
+import Image from "next/image";
 
 const CandidateCard = ({
   candidate,
@@ -62,7 +63,9 @@ const CandidateCard = ({
         className="flex relative items-center "
       >
         <div className="flex-shrink-0">
-          <img
+          <Image
+            width={36}
+            height={36}
             className="w-9 h-9 rounded-full"
             src={AVATARS[candidateId % 4]}
             alt="pfp"

@@ -12,6 +12,7 @@ import { useParams } from "next/navigation";
 import { sepolia } from "viem/chains";
 import { unpinJSONFile } from "@/app/helpers/pinToIPFS";
 import CandidateDescription from "../../Fragment/CandidateDescription";
+import Image from "next/image";
 
 const CreditsVoting = ({
   candidate,
@@ -52,7 +53,9 @@ const CreditsVoting = ({
         <div className="p-2 select-none">
           <div className="flex relative items-center ">
             <div className="flex-shrink-0">
-              <img
+              <Image
+                width={36}
+                height={36}
                 className="w-9 h-9 rounded-full"
                 src={AVATARS[candidateId % 4]}
                 alt="pfp"
